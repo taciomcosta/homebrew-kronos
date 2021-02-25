@@ -9,13 +9,23 @@ class Kronos < Formula
   def install
     bin.install "kronosd"
     bin.install "kronos"
-    prefix.install "com.taciomcosta.kronos.plist"
+    system "mkdir -p /etc/kronos"
+    system "mkdir -p /var/lib/kronos"
   end
 
-  def caveats
-    system "sudo mkdir -p /etc/kronos"
-    system "sudo mkdir -p /var/lib/kronos"
-    system "sudo cp #{prefix}/com.taciomcosta.kronos.plist /Library/LaunchDaemons/com.taciomcosta.kronos.plist"
-    system "sudo launchctl load /Library/LaunchDaemons/com.taciomcosta.kronos.plist"
+  plist_options manual: "kronosd"
+
+  def plist
+    <<~EOS
+      <?xml version='1.0' encoding='UTF-8'?>
+      <!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\" >
+      <plist version='1.0'>
+        <dict>
+          <key>Label</key><string>#{plist_name}</string>
+          <key>Program</key><string>#{opt_bin}/kronosd</string>
+          <key>RunAtLoad</key><true/>
+        </dict>
+      </plist>
+    EOS
   end
 end
