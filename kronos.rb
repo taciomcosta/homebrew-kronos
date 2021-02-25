@@ -9,11 +9,8 @@ class Kronos < Formula
   def install
     bin.install "kronosd"
     bin.install "kronos"
-    system "mkdir -p /etc/kronos"
-    system "mkdir -p /var/lib/kronos"
     (var/"kronos").mkpath
     (etc/"kronos").mkpath
-    print var
   end
 
   plist_options manual: "kronosd"
